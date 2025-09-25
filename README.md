@@ -2,7 +2,7 @@
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/brain-tumor-model.git
+git clone https://github.com/karthikeyan-kosuri/brain-tumor-model
 cd brain-tumor-model
 ```
 ### 2. Create a Virtual environment
