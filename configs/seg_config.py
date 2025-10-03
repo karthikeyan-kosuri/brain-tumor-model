@@ -6,7 +6,7 @@ test_mask='data/segmentation_task/test/masks'
 
 #Training parameters
 epochs=50
-batch_size=2
+batch_size=12
 learning_rate=0.0001
 num_worker=4
 

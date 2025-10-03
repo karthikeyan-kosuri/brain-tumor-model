@@ -7,6 +7,9 @@ import torch.optim as optim
 from torch.optim.lr_scheduler import CosineAnnealingLR
 from torch.utils.data import DataLoader
 from torch.amp import GradScaler, autocast
+from tqdm import tqdm
+
+#utils and configurations imports
 from configs import seg_config as cfg
 from src.dataset.brisc_dataset import BrainMRIDataset
 from src.utils.metrics import dice_score, iou_score
@@ -15,8 +18,9 @@ from src.utils.checkpoint import (save_checkpoint,ModelCheckpoint,resume_trainin
 from src.utils.early_stopping import EarlyStopping
 from src.utils.io_utils import setup_directories
 from src.utils.validation import (validate_model, calculate_metrics)
+
+#model import
 from src.model.unet import build_unet
-from tqdm import tqdm
 
 def train():
 
@@ -30,7 +34,7 @@ def train():
     test_dataset= BrainMRIDataset(cfg.test_images, cfg.test_mask)
     train_loader,test_loader=create_data_loaders(train_dataset,test_dataset, cfg)
 
-    #loading the model with loss optimizer functions and sheduler
+    #loading the model with loss optimizer functions and scheduler
     model=build_unet(in_c= cfg.in_channel, out_c= cfg.out_channel).to(device)
     criterion=nn.BCEWithLogitsLoss()
     optimizer=optim.Adam(model.parameters(), lr=cfg.learning_rate)
