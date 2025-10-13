@@ -29,17 +29,20 @@ def train():
     device=torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f'Training on device: {device}')
 
-    #loading the dataset
+    #loading the dataset and creating dataloaders for trainig in batches
     train_dataset=BrainMRIDataset(cfg.train_images, cfg.train_mask)
     test_dataset= BrainMRIDataset(cfg.test_images, cfg.test_mask)
     train_loader,test_loader=create_data_loaders(train_dataset,test_dataset, cfg)
 
     #loading the model with loss optimizer functions and scheduler
     model=build_unet(in_c= cfg.in_channel, out_c= cfg.out_channel).to(device)
+    #binary cross entropy loss function
     criterion=nn.BCEWithLogitsLoss()
+    #adam optimizer
     optimizer=optim.Adam(model.parameters(), lr=cfg.learning_rate)
+    #learning rate scheduler that decreases lr using cosine curve
     scheduler=CosineAnnealingLR(optimizer,T_max=cfg.epochs,eta_min=1e-6)
-
+    
     #training utils
     use_amp=hasattr(torch.cuda,'amp') and torch.cuda.is_available()
     scaler=GradScaler('cuda') if use_amp else None
